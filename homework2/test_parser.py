@@ -21,11 +21,12 @@ class TestParser(unittest.TestCase):
             a = 5
             parse_json('{"a": "b"}', a, ["field"], ["keyword"])
         with self.assertRaises(TypeError):
-            parse_json('{"a": "b"}', print, keywords=[
-                       "keyword"], required_field=None)
+            print("HERE")
+            parse_json('{"a": "b"}', print, keywords=["keyword"], required_fields=None)
         with self.assertRaises(TypeError):
+            print("HERE")
             parse_json('{"a": "b"}', print, keywords=None,
-                       required_field=["keyword"])
+                       required_fields=["keyword"])
 
     def test_calls_callback(self):
         """Tests order of callback calls."""

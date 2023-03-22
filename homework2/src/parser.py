@@ -1,14 +1,14 @@
 import json
 import re
 
-def _validate_parsing_args(json_str: str, keyword_callback, required_fields=None, keywords=None):
+def _validate_parsing_args(json_str: str, keyword_callback, required_fields, keywords):
     """Checks arguments of method for parsing"""
     if not json_str:
         raise ValueError("Empty json is not valid!")
     if required_fields is None:
         raise TypeError("Requaired fields should be not None!")
     if keywords is None:
-        raise TypeError("keymords should be not None!")
+        raise TypeError("keywords should be not None!")
     if keyword_callback is None or not callable(keyword_callback):
         raise TypeError("Callback FUNCTION is obligatory!")
     
