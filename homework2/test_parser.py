@@ -1,3 +1,4 @@
+"""Unit tests for json parser."""
 from unittest.mock import Mock, call, patch
 import unittest
 from src.parser import parse_json
@@ -18,13 +19,11 @@ class TestParser(unittest.TestCase):
         with self.assertRaises(TypeError):
             parse_json('{"a": "b"}', None, ["field"], ["keyword"])
         with self.assertRaises(TypeError):
-            a = 5
-            parse_json('{"a": "b"}', a, ["field"], ["keyword"])
+            not_method = 5
+            parse_json('{"a": "b"}', not_method, ["field"], ["keyword"])
         with self.assertRaises(TypeError):
-            print("HERE")
-            parse_json('{"a": "b"}', print, keywords=["keyword"], required_fields=None)
+            parse_json('{"a": "b"}', print, keywords=["keyword"])
         with self.assertRaises(TypeError):
-            print("HERE")
             parse_json('{"a": "b"}', print, keywords=None,
                        required_fields=["keyword"])
 
@@ -32,7 +31,8 @@ class TestParser(unittest.TestCase):
         """Tests order of callback calls."""
         callback_mock = Mock(return_value='some result')
         parse_json("""{"first_key": "Uhm-uhm, hello my friend",
-            "third": "Nice to meet you!", "second_key": "hello and goodbye"}""",
+                "third": "Nice to meet you!",
+                "second_key": "hello and goodbye"}""",
                    callback_mock, ["first_key", "second_key"],
                    ["hello", "goodbye"])
 
@@ -48,19 +48,20 @@ class TestParser(unittest.TestCase):
             arg = arg.upper()
             print(arg)
 
-        parse_json('{"Intro": "My name is Gustavo", "Middle": "Uhm.", "End": "But you can call me Gas."}',
+        parse_json("""{"Intro": "My name is Gustavo", "Middle": "Uhm.",
+        "End": "But you can call me Gas."}""",
                    keyword_callback=test_callback, required_fields=[
                        "Intro", "End"],
                    keywords=["My", "you", "me"])
         expected_calls = [call("MY"), call("YOU"), call("ME")]
         mock_print.assert_has_calls(expected_calls)
 
-
     def test_similar_words(self):
         """Tests parser's behavior on similar but not equal words."""
         callback_mock = Mock(return_value='some result')
         parse_json("""{"first_key": "Uhm-uhm, hello my friend",
-            "third": "Nice to meet you!", "second_key": "hello and goodbye"}""",
+            "third": "Nice to meet you!",
+            "second_key": "hello and goodbye"}""",
                    callback_mock, ["first_key", "second_key"],
                    ["friends", "nice", "uhm"])
         callback_mock.assert_has_calls([])
