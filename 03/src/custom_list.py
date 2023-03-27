@@ -1,54 +1,51 @@
+"""Module with CustomList class."""
 from __future__ import annotations
 
 
 class CustomList(list):
-
+    """Custom list with overrided addition, subtraction, comparisons and str."""
     @staticmethod
     def __lists_addition(first, second) -> CustomList:
         result = CustomList([0] * max(len(first), len(second)))
-        for i in range(len(result)):
-            if i < len(first):
-                result[i] += first[i]
-            if i < len(second):
-                result[i] += second[i]
+        for index, _ in enumerate(result):
+            if index < len(first):
+                result[index] += first[index]
+            if index < len(second):
+                result[index] += second[index]
         return result
 
     @staticmethod
     def __lists_subtraction(first, second) -> CustomList:
         result = CustomList([0] * max(len(first), len(second)))
-        for i in range(len(result)):
-            if i < len(first):
-                result[i] += first[i]
-            if i < len(second):
-                result[i] -= second[i]
+        for index, _ in enumerate(result):
+            if index < len(first):
+                result[index] += first[index]
+            if index < len(second):
+                result[index] -= second[index]
         return result
 
     def __add__(self, other) -> CustomList:
-        if isinstance(other, list) or isinstance(other, CustomList):
+        if isinstance(other, (list, CustomList)):
             return CustomList.__lists_addition(self, other)
-        else:
-            raise AttributeError(
+        raise AttributeError(
                 "Addition is posible only for CustomLists and lists!")
 
     def __radd__(self, other) -> CustomList:
-        if isinstance(other, list) or isinstance(other, CustomList):
+        if isinstance(other, (list, CustomList)):
             return CustomList.__lists_addition(other, self)
-        else:
-            raise AttributeError(
+        raise AttributeError(
                 "Addition is posible only for CustomLists and lists!")
 
     def __sub__(self, other) -> CustomList:
-        if isinstance(other, list) or isinstance(other, CustomList):
+        if isinstance(other, (list, CustomList)):
             return CustomList.__lists_subtraction(self, other)
-        else:
-            raise AttributeError(
+        raise AttributeError(
                 "Subtraction is posible only for CustomLists and lists!")
 
     def __rsub__(self, other) -> CustomList:
-        if isinstance(other, list) or isinstance(other, CustomList):
+        if isinstance(other, (list, CustomList)):
             return CustomList.__lists_subtraction(other, self)
-        else:
-            raise AttributeError(
+        raise AttributeError(
                 "Subtraction is posible only for CustomLists and lists!")
 
     def __str__(self) -> bool:
