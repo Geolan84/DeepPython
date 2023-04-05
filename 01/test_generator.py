@@ -1,7 +1,7 @@
 """Unit tests for "search_lines" generator."""
 import unittest
 import io
-from src.explorer import search_lines
+from explorer import search_lines
 
 
 class TestExplorer(unittest.TestCase):
@@ -35,3 +35,6 @@ class TestExplorer(unittest.TestCase):
         """Tests that function doesn't find words with additional letters."""
         self.assertEqual(list(search_lines(["проектымана"],
                                            file=self.source)), [])
+        
+    def test_line_returned_once(self):
+        print(list(search_lines(["это", "более"], file=self.source)))
