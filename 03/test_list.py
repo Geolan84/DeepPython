@@ -1,6 +1,6 @@
 """unittest tests for CustomList class."""
 import unittest
-from src.custom_list import CustomList
+from custom_list import CustomList
 
 
 class TestCustomList(unittest.TestCase):
@@ -73,39 +73,39 @@ class TestCustomList(unittest.TestCase):
 
     def test_addition_dif_types(self):
         """Tests correctness of different types addition."""
-        self.assertEqual(CustomList([23, 41, 96]) +
-                         [92, 4], CustomList([115, 45, 96]))
-        self.assertEqual(CustomList(
-            [100, -40, 96])+[92, 4, 6, 10], CustomList([192, -36, 102, 10]))
-        self.assertEqual([92, 4]+CustomList([23, 41, 96]),
-                         CustomList([115, 45, 96]))
-        self.assertEqual([92, 4, 150, -43]+CustomList([3, 37, -10]),
-                         CustomList([95, 41, 140, -43]))
+        self.assertEqual(list(CustomList([23, 41, 96]) +
+                         [92, 4]), list(CustomList([115, 45, 96])))
+        self.assertEqual(list(CustomList(
+            [100, -40, 96])+[92, 4, 6, 10]), list(CustomList([192, -36, 102, 10])))
+        self.assertEqual(list([92, 4]+CustomList([23, 41, 96])),
+                         list(CustomList([115, 45, 96])))
+        self.assertEqual(list([92, 4, 150, -43]+CustomList([3, 37, -10])),
+                         list(CustomList([95, 41, 140, -43])))
 
     def test_subtraction_dif_types(self):
         """Tests correctness of different types subtraction."""
-        self.assertEqual(CustomList([23, 41, 96]) -
-                         [92, 4], CustomList([-69, 37, 96]))
-        self.assertEqual(CustomList([100, -40, 96]) -
-                         [92, 4, 6, 10], CustomList([8, -44, 90, -10]))
-        self.assertEqual([92, 4]-CustomList([23, 41, 96]),
-                         CustomList([69, -37, -96]))
-        self.assertEqual([92, 4, 150, -43]-CustomList([3, 37, -10]),
-                         CustomList([89, -33, 160, -43]))
+        self.assertEqual(list(CustomList([23, 41, 96]) -
+                         [92, 4]), list(CustomList([-69, 37, 96])))
+        self.assertEqual(list(CustomList([100, -40, 96]) -
+                         [92, 4, 6, 10]), list(CustomList([8, -44, 90, -10])))
+        self.assertEqual(list([92, 4]-CustomList([23, 41, 96])),
+                         list(CustomList([69, -37, -96])))
+        self.assertEqual(list([92, 4, 150, -43]-CustomList([3, 37, -10])),
+                         list(CustomList([89, -33, 160, -43])))
 
     def test_addition(self):
         """Extra tests of addition's corectness."""
-        self.assertEqual(CustomList(
-            [5, 1, 3, 7])+CustomList([1, 2, 7]), CustomList([6, 3, 10, 7]))
-        self.assertEqual(CustomList(
-            [1])+CustomList([2, 5]), CustomList([3, 5]))
+        self.assertEqual(list(CustomList(
+            [5, 1, 3, 7])+CustomList([1, 2, 7])), list(CustomList([6, 3, 10, 7])))
+        self.assertEqual(list(CustomList(
+            [1])+CustomList([2, 5])), list(CustomList([3, 5])))
 
     def test_subtraction(self):
         """Extra tests of subtraction's corectness."""
-        self.assertEqual(CustomList(
-            [5, 1, 3, 7])-CustomList([1, 2, 7]), CustomList([4, -1, -4, 7]))
-        self.assertEqual(CustomList(
-            [1])-CustomList([2, 5]), CustomList([-1, -5]))
+        self.assertEqual(list(CustomList(
+            [5, 1, 3, 7])-CustomList([1, 2, 7])), list(CustomList([4, -1, -4, 7])))
+        self.assertEqual(list(CustomList(
+            [1])-CustomList([2, 5])), list(CustomList([-1, -5])))
 
     def test_add_incorrect_types(self):
         """Tests incompatibility of types except list and CustomList in addition."""
