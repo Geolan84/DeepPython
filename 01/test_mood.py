@@ -56,12 +56,14 @@ class TestMood(unittest.TestCase):
                 "Hello", self.model, 0.3, 0.7))
             
     def test_predict_called_once(self):
+        """Tests count of calls."""
         with mock.patch("mood_predictor.SomeModel.predict") as mock_model:
             mock_model.return_value = 0.3
             predict_message_mood("SomeArgIsHere", self.model)
             mock_model.assert_called_once()
 
     def test_predict_arguments(self):
+        """Tests arguments from call."""
         with mock.patch("mood_predictor.SomeModel.predict") as mock_model:
             mock_model.return_value = 0.4
             predict_message_mood("FirstArg", self.model)
