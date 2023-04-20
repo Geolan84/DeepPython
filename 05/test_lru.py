@@ -13,7 +13,7 @@ class TestLRU(unittest.TestCase):
             LRUCache(-5)
 
     def test_get_none(self):
-        """Tests get() with values which does not exist."""
+        """Tests get() with values which doesn't exist."""
         cache = LRUCache(5)
         self.assertIsNone(cache.get("Not exist"))
         cache.set("New key", 56)

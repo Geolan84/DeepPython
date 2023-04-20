@@ -1,15 +1,16 @@
+"""Custom LRUCache for caching data."""
 import collections
 from collections.abc import Hashable
 
 
 class LRUCache:
-
+    """Class of custom LRU cache."""
     OrderedItem = collections.namedtuple("OrderedItem", ["priority", "value"])
 
     def __init__(self, limit=42):
         if limit < 1:
             raise ValueError("LRU size should be greater than 0!")
-        self.__cache = dict()
+        self.__cache = {}
         self.__capacity = limit
         self.__length = 0
 
@@ -23,6 +24,7 @@ class LRUCache:
         return key_to_delete
 
     def get(self, key):
+        """Get value by key from cashe."""
         try:
             result = self.__cache[key].value
             self.__update_priority()
