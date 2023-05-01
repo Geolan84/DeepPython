@@ -1,0 +1,4 @@
+https://en.wikipedia.org/wiki/Wikipedia:Contact_us
+https://www.python.org/community/diversity/
+https://dart.dev/overview
+https://go.dev/
