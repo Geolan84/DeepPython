@@ -3,3 +3,17 @@ https://dart.dev/
 https://go.dev/
 https://kotlinlang.org/
 https://www.swift.org/
+https://www.typescriptlang.org/
+https://www.rust-lang.org/
+https://www.php.net/
+https://www.ruby-lang.org/
+https://www.scala-lang.org/
+https://dotnet.microsoft.com/languages/fsharp
+https://openjdk.org/projects/jdk
+https://www.r-project.org/
+https://fortran-lang.org/en/
+https://scratch.mit.edu/
+https://www.mathworks.com/products/matlab.html
+https://ada-lang.io/
+https://www.niisi.ru/kumir/
+https://clang.llvm.org/
