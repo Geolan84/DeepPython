@@ -1,3 +1,4 @@
+"""Tests for async fetcher."""
 from unittest import mock
 import unittest
 import asyncio
@@ -18,16 +19,22 @@ test_links = {"https://www.python.org/",
 
 
 class TestAsyncFetcher(unittest.IsolatedAsyncioTestCase):
-
+    """TestCase for async fetcher."""
     async def test_http_and_generator_mocks(self):
-        with mock.patch("fetcher.url_generator", side_effect=generator_mock) as mock_gen, mock.patch("aiohttp.ClientSession.get", side_effect=HttpGetMock) as http_mock:
+        """Tests calls for http get and url generator."""
+        with mock.patch("fetcher.url_generator", side_effect=generator_mock)\
+             as mock_gen,\
+             mock.patch("aiohttp.ClientSession.get", side_effect=HttpGetMock)\
+             as http_mock:
             await process_links(5)
             called_urls = set([x.args[0] for x in http_mock.call_args_list])
             self.assertEqual(called_urls, test_links)
             mock_gen.assert_called_once_with()
 
     async def test_semaphore(self):
-        with mock.patch("fetcher.url_generator", side_effect=generator_mock) as mock_gen, mock.patch("aiohttp.ClientSession.get", side_effect=HttpGetMock) as http_mock:
+        """Tests impact of increasing semaphore limit."""
+        with mock.patch("fetcher.url_generator", side_effect=generator_mock),\
+             mock.patch("aiohttp.ClientSession.get", side_effect=HttpGetMock):
             start = time.time()
             await process_links(1)
             slow_semaphore = time.time() - start
@@ -38,7 +45,9 @@ class TestAsyncFetcher(unittest.IsolatedAsyncioTestCase):
             self.assertGreaterEqual(slow_semaphore, fast_semaphore)
 
     async def test_negative_semaphore(self):
-        with mock.patch("fetcher.url_generator", side_effect=generator_mock), mock.patch("aiohttp.ClientSession.get", side_effect=HttpGetMock):
+        """Tests incorrect values for semaphore limit."""
+        with mock.patch("fetcher.url_generator", side_effect=generator_mock),\
+             mock.patch("aiohttp.ClientSession.get", side_effect=HttpGetMock):
             with self.assertRaises(ValueError):
                 await process_links(-1)
             with self.assertRaises(ValueError):
@@ -48,11 +57,13 @@ class TestAsyncFetcher(unittest.IsolatedAsyncioTestCase):
 
 
 def generator_mock():
+    """Mock generator without reading file."""
     for link in test_links:
         yield link
 
 
 class HttpGetMock(contextlib.AsyncContextDecorator):
+    """Mock context decorator for aiohttp.ClientSession.get."""
     def __init__(self, url):
         self.url = url
         self.status = f"200 {url}"

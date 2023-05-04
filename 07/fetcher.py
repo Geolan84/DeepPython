@@ -1,7 +1,9 @@
+"""Async fetcher for urls."""
 import asyncio
-import aiohttp
 import time
 import sys
+import aiohttp
+
 
 FILE_NAME = 'urls.txt'
 WORKERS_COUNT = 4
@@ -9,6 +11,7 @@ FILL_SIZE = 4
 
 
 def url_generator():
+    """Generator for reading urls row by row."""
     file = open(FILE_NAME, 'r', encoding="utf-8")
     with file:
         while (line := file.readline().rstrip('\n')):
@@ -16,6 +19,7 @@ def url_generator():
 
 
 async def fetch_url(url, sem):
+    """Http request with semaphore."""
     async with aiohttp.ClientSession() as session:
         async with sem:
             async with session.get(url) as resp:
@@ -23,6 +27,7 @@ async def fetch_url(url, sem):
 
 
 async def async_worker(queue, semaphore):
+    """Worker for url from queue."""
     while True:
         url = await queue.get()
         try:
@@ -32,6 +37,7 @@ async def async_worker(queue, semaphore):
 
 
 async def process_links(semaphore_limit):
+    """Iterate on urls and create tasks for workers."""
     if not isinstance(semaphore_limit, int) or semaphore_limit < 1:
         raise ValueError("Limit should be positive integer!")
     generator = url_generator()
@@ -40,7 +46,7 @@ async def process_links(semaphore_limit):
     workers = [asyncio.create_task(async_worker(queue, semaphore))
                for _ in range(WORKERS_COUNT)]
     is_urls_exists = True
-    t1 = time.time()
+    start = time.time()
     while is_urls_exists:
         # Fill the queue with new FILL_SIZE elements.
         for _ in range(FILL_SIZE):
@@ -51,8 +57,7 @@ async def process_links(semaphore_limit):
         # Wait for workers.
         await queue.join()
 
-    t2 = time.time()
-    print('TIME', t2 - t1)
+    print('TIME', time.time() - start)
 
     for worker in workers:
         worker.cancel()
@@ -64,9 +69,9 @@ if __name__ == "__main__":
               'For example: "python fetcher.py 5"')
     else:
         try:
-            limit = int(sys.argv[1])
-            if limit < 1:
+            LIMIT = int(sys.argv[1])
+            if LIMIT < 1:
                 raise ValueError()
-            asyncio.run(process_links(limit))
+            asyncio.run(process_links(LIMIT))
         except ValueError:
             print('Limit should be positive integer!')
