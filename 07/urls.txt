@@ -1,4 +1,5 @@
-https://en.wikipedia.org/wiki/Wikipedia:Contact_us
-https://www.python.org/community/diversity/
-https://dart.dev/overview
+https://www.python.org/
+https://dart.dev/
 https://go.dev/
+https://kotlinlang.org/
+https://www.swift.org/
