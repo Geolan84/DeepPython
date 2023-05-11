@@ -56,47 +56,30 @@ class WeakrefSubject():
         self.days = days
 
 
-N = 100000
+N = 1000000
 
-# slots.
-tracemalloc.start()
-start_time = timeit.default_timer()
-subjects = [SubjectSlots(Teacher("Ivan", 'Ivanov', 'docent'),
-                         Assistant("Alex", "Gant", 3), 4, 1) for _ in range(N)]
-for subject in subjects:
-    subject.days += 1
-print("CPU Time (Subjects with slots):",
-      round(timeit.default_timer() - start_time, 4), "s")
-print("Peak memory (Subject with slots):", tracemalloc.get_traced_memory()[1])
-tracemalloc.stop()
-del subjects
-print()
 
-# simple structure.
-tracemalloc.start()
-start_time = timeit.default_timer()
-subjects = [SimpleSubject(Teacher("Ivan", 'Ivanov', 'docent'),
-                          Assistant("Alex", "Gant", 3),
-                          4, 1) for _ in range(N)]
-for subject in subjects:
-    subject.days += 1
-print("CPU Time (Simple Subject):",
-      round(timeit.default_timer() - start_time, 2), "s")
-print("Peak memory (Simple Subject):", tracemalloc.get_traced_memory()[1])
-tracemalloc.stop()
-del subjects
-print()
+def test_structure(class_type, title):
+    """Creates list of objects, updates attributes and profile function."""
+    print(title)
+    tracemalloc.start()
+    start_time = timeit.default_timer()
+    subjects = [class_type(Teacher("Ivan", 'Ivanov', 'docent'),
+                           Assistant("Alex", "Gant", 3), 4, 1)
+                           for _ in range(N)]
+    print("CPU Time of creation:",
+          round(timeit.default_timer() - start_time, 4), "s")
+    start_time = timeit.default_timer()
+    for subject in subjects:
+        subject.days += 1
+    print("CPU Time of updating attributes:",
+          round(timeit.default_timer() - start_time, 4), "s")
+    print("Peak memory:", tracemalloc.get_traced_memory()[1])
+    tracemalloc.stop()
+    del subjects
+    print()
 
-# weakref.
-tracemalloc.start()
-start_time = timeit.default_timer()
-subjects = [WeakrefSubject(Teacher("Ivan", 'Ivanov', 'docent'),
-                           Assistant("Alex", "Gant", 3),
-                           4, 1) for _ in range(N)]
-for subject in subjects:
-    subject.days += 1
-print("CPU Time (Weakref Subject):",
-      round(timeit.default_timer() - start_time, 4), "s")
-print("Peak memory (Weakref Subject):", tracemalloc.get_traced_memory()[1])
-tracemalloc.stop()
-del subjects
+
+test_structure(SubjectSlots, "slots")
+test_structure(SimpleSubject, "simple class")
+test_structure(WeakrefSubject, "weakref")
