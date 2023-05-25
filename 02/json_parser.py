@@ -23,12 +23,11 @@ def parse_json(json_str: str, keyword_callback,
                            required_fields, keywords)
     try:
         json_doc = json.loads(json_str)
-    except json.JSONDecodeError:
-        raise ValueError("Corrupted JSON!")
+    except json.JSONDecodeError as exc:
+        raise ValueError("Corrupted JSON!") from exc
     for field in required_fields:
         for keyword in keywords:
-            for key, value in json_doc.items():
-                if key == field:
-                    for _ in range(re.split(' |\.|,|!|\?|:',
-                                            value).count(keyword)):
-                        keyword_callback(keyword)
+            if field in json_doc.keys():
+                for _ in range(re.split(' |\.|,|!|\?|:',
+                                        json_doc[field]).count(keyword)):
+                    keyword_callback(field, keyword)

@@ -1,7 +1,7 @@
 """Unit tests for json parser."""
 from unittest.mock import Mock, call, patch
 import unittest
-from src.parser import parse_json
+from json_parser import parse_json
 
 
 class TestParser(unittest.TestCase):
@@ -37,23 +37,24 @@ class TestParser(unittest.TestCase):
                    ["hello", "goodbye"])
 
         callback_mock.assert_has_calls(
-            [call('hello'), call('hello'), call('goodbye')])
+            [call('first_key', 'hello'),
+             call('second_key', 'hello'),
+             call('second_key', 'goodbye')])
 
     @patch('builtins.print')
     def test_correct_words(self, mock_print):
         """Tests correctness of usage callback."""
 
-        def test_callback(arg: str):
+        def test_callback(*args):
             """Callback function, prints string in upper case."""
-            arg = arg.upper()
-            print(arg)
+            print(("{}:" * len(args)).format(*args).rstrip(':').upper())
 
         parse_json("""{"Intro": "My name is Gustavo", "Middle": "Uhm.",
         "End": "But you can call me Gas."}""",
                    keyword_callback=test_callback, required_fields=[
                        "Intro", "End"],
                    keywords=["My", "you", "me"])
-        expected_calls = [call("MY"), call("YOU"), call("ME")]
+        expected_calls = [call("INTRO:MY"), call("END:YOU"), call("END:ME")]
         mock_print.assert_has_calls(expected_calls)
 
     def test_similar_words(self):
