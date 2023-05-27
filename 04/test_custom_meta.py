@@ -28,12 +28,15 @@ class TestMetaClass(unittest.TestCase):
     def test_call_with_custom(self):
         """Tests availability of existing attribute with custom prefix."""
         self.assertEqual(self.custom.custom_x, 50)
+        self.assertEqual(self.custom.custom_val, 99)
         self.assertEqual(self.custom.custom_line(), "line result")
 
     def test_call_without_custom(self):
         """Tests unavailability of existing attribute without custom prefix."""
         with self.assertRaises(AttributeError):
             self.custom.x
+        with self.assertRaises(AttributeError):
+            self.custom.val
         with self.assertRaises(AttributeError):
             self.custom.line()
 
@@ -48,7 +51,7 @@ class TestMetaClass(unittest.TestCase):
         with self.assertRaises(AttributeError):
             self.custom.new_attr
 
-    def test_magic_methods(self):
+    def test_magic_methods_availability(self):
         """Tests availability of magic methods without custom prefix."""
         self.assertEqual(self.custom.__str__(), "Custom_by_metaclass")
         self.assertEqual(self.custom.__module__, "test_custom_meta")
@@ -69,3 +72,18 @@ class TestMetaClass(unittest.TestCase):
         with self.assertRaises(AttributeError):
             self.custom._new_protected_attribute
         self.assertEqual(self.custom.custom__new_protected_attribute, 112)
+
+    def test_call_by_class(self):
+        """Tests availability of field 'x' from class-call."""
+        with self.assertRaises(AttributeError):
+            CustomClass.x
+        self.assertEqual(CustomClass.custom_x, 50)
+
+    def test_magic_methods_ignores(self):
+        """Tests that __setattr__ don't rename overriden magic methods."""
+        def eq_mock():
+            return "eq_mock"
+        self.custom.__eq__ = eq_mock
+        with self.assertRaises(AttributeError):
+            self.custom.custom___eq__()
+        self.assertEqual(self.custom.__eq__(), "eq_mock")
