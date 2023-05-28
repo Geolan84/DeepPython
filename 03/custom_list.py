@@ -3,7 +3,7 @@ from __future__ import annotations
 
 
 class CustomList(list):
-    """Custom list with overrided addition, subtraction, comparisons and str."""
+    """Custom list with overrided addition, subtraction, comparisons, str."""
     @staticmethod
     def __lists_addition(first, second) -> CustomList:
         result = CustomList([0] * max(len(first), len(second)))
