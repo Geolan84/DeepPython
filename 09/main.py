@@ -32,31 +32,32 @@ class LRUCache:
             result = self.__cache[key].value
             self.__update_priority()
             self.__cache[key] = self.OrderedItem(0, self.__cache[key].value)
-            logging.info(f"Got item by key '{key}'.")
+            logging.info("Got item by key: %s", key)
             return result
         except KeyError:
-            logging.info(f"Key '{key}' doesn't exist.")
+            logging.info("Key '%s' doesn't exist.", key)
             return None
 
     def set(self, key, value):
         """Add new key-value pair to cashe."""
         if not isinstance(key, Hashable):
-            logging.debug(f"Got unhashable object in key: {key}")
+            logging.debug("Got unhashable object in key: %s", key)
             raise ValueError("Key should be hashable! Implement __hash__()!")
         delete_key = self.__update_priority()
         if self.__length < self.__capacity:
             self.__length += 1
         elif delete_key is not None:
-            logging.info(f"Set {key} when dict is overloaded.")
+            logging.info("Set '%s' when dict is overloaded.", key)
             del self.__cache[delete_key]
-        if key in self.__cache.keys():
-            logging.info(f"Set existant key '{key}'")
+        if key in self.__cache:
+            logging.info("Set existant key '%s'", key)
         else:
-            logging.info(f"Set with key '{key}', which doesn't exist.")
+            logging.info("Set with key '%s', which doesn't exist.", key)
         self.__cache[key] = self.OrderedItem(0, value)
 
 
 class OnlySetFilter(logging.Filter):
+    """Filter for logging, choose only set-operations."""
     def filter(self, record):
         return record.getMessage().startswith('Set ')
 
@@ -73,13 +74,13 @@ if __name__ == "__main__":
     if "-s" in sys.argv:
         console_handler = logging.StreamHandler(sys.stdout)
         console_handler.setLevel(logging.DEBUG)
+        if "-f" in sys.argv:
+            console_handler.addFilter(OnlySetFilter())
         full.addHandler(console_handler)
-
-cache = LRUCache(2)
-
-cache.set("k1", "val1")
-cache.set("k1", "val2")
-cache.get("k2")
-cache.get("k1")
-cache.set("k2", "val2")
-cache.set("k3", "val2")
+    cache = LRUCache(2)
+    cache.set("k1", "val1")
+    cache.set("k1", "val2")
+    cache.get("k2")
+    cache.get("k1")
+    cache.set("k2", "val2")
+    cache.set("k3", "val2")
